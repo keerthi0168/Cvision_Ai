@@ -12,7 +12,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://cvision-aibackend.vercel.app/api/$1"
+      "destination": "https://cvisionaibackend.vercel.app/api/$1"
     }
   ],
   "routes": [
