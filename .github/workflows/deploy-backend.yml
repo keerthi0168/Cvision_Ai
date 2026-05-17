@@ -27,7 +27,6 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          npm install -g vercel@latest
-          # Deploy backend as a separate Vercel project. --prod and --confirm avoid prompts.
-          vercel --prod --confirm --token "$VERCEL_TOKEN"
+          # Use npx to run Vercel CLI without global install
+          npx --yes vercel --prod --confirm --token "$VERCEL_TOKEN"
 

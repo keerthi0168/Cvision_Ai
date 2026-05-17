@@ -19,7 +19,8 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: |
-          npm ci
+          # Use npm install instead of npm ci because repo may not have a lockfile
+          npm install --no-audit --no-fund
 
       - name: Build frontend
         working-directory: frontend
@@ -31,7 +32,5 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         working-directory: frontend
         run: |
-          # Install Vercel CLI and deploy (requires VERCEL_TOKEN secret)
-          npm install -g vercel@latest
-          # Use --prod and --confirm to avoid interactive prompts
-          vercel --prod --confirm --token "$VERCEL_TOKEN"
+          # Use npx to run Vercel CLI without a global install
+          npx --yes vercel --prod --confirm --token "$VERCEL_TOKEN"
