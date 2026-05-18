@@ -1,24 +1,16 @@
-{
+﻿{
   "version": 2,
+  "buildCommand": "pip install -r backend/requirements.txt",
   "builds": [
     {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "frontend/dist"
-      }
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://cvisionaibackend.vercel.app/api/$1"
+      "src": "backend/api/index.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "\\/(.*)",
-      "dest": "frontend/dist/index.html"
+      "src": "/(.*)",
+      "dest": "/backend/api/index.py"
     }
   ]
 }
