@@ -1,16 +1,10 @@
 ﻿{
-  "version": 2,
-  "buildCommand": "pip install -r backend/requirements.txt",
-  "builds": [
+  "rewrites": [
     {
-      "src": "backend/api/index.py",
-      "use": "@vercel/python"
+      "source": "/api/(.*)",
+      "destination": "https://cvisionaibackend.vercel.app/api/$1"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/backend/api/index.py"
-    }
-  ]
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist"
 }
