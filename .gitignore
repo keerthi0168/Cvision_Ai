@@ -1,0 +1,18 @@
+# Git ignore file
+node_modules/
+__pycache__/
+*.pyc
+.env
+.env.local
+.DS_Store
+dist/
+build/
+*.egg-info/
+.venv/
+venv/
+.idea/
+.vscode/
+*.log
+.pytest_cache/
+.coverage
+htmlcov/

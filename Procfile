@@ -1,0 +1,3 @@
+web: gunicorn -w 4 -b 0.0.0.0:$PORT backend.main:app
+
+release: pip install -r backend/requirements.txt

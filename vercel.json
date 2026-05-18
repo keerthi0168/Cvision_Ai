@@ -1,10 +1,4 @@
 ﻿{
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://cvisionaibackend.vercel.app/api/$1"
-    }
-  ],
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist"
 }
