@@ -3,7 +3,14 @@ import LandingPage from './pages/LandingPage'
 import Dashboard from './pages/Dashboard'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('landing')
+  const [currentPage, setCurrentPage] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search)
+      return params.get('page') === 'dashboard' ? 'dashboard' : 'landing'
+    } catch (e) {
+      return 'landing'
+    }
+  })
   const [resumeData, setResumeData] = useState(null)
 
   const handleResumeUpload = (data) => {
