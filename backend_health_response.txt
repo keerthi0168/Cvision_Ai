@@ -1,0 +1,16 @@
+HTTP/1.1 404 Not Found
+Cache-Control: public, max-age=0, must-revalidate
+Content-Length: 79
+Content-Type: text/plain; charset=utf-8
+Date: Sun, 17 May 2026 18:48:28 GMT
+Server: Vercel
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+X-Vercel-Enable-Rewrite-Caching: 1
+X-Vercel-Error: NOT_FOUND
+X-Vercel-Id: bom1::sx4mj-1779043708051-5f034e12259a
+
+The page could not be found
+
+NOT_FOUND
+
+bom1::sx4mj-1779043708051-5f034e12259a
