@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Button from '../components/Button'
 import Card from '../components/Card'
+import { uploadResume } from '../services/api'
 
 export default function LandingPage({ onUpload }) {
   const [isDragging, setIsDragging] = useState(false)
@@ -32,15 +33,13 @@ export default function LandingPage({ onUpload }) {
 
     setIsLoading(true)
     try {
-      // Mock data for now - will integrate with backend API
-      const mockData = {
-        resume_id: 'mock_' + Date.now(),
-        filename: file.name,
-        upload_time: new Date().toISOString()
-      }
-      onUpload(mockData)
+      // Call backend API to upload resume
+      const result = await uploadResume(file)
+      // result expected to be { resume_id, filename, upload_time }
+      onUpload(result)
     } catch (error) {
-      alert('Error uploading file')
+      console.error('Upload failed', error)
+      alert('Error uploading file. Make sure backend is deployed and VITE_API_URL is set.')
     }
     setIsLoading(false)
   }

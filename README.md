@@ -215,6 +215,62 @@ Option C — Combine backend into the frontend project as serverless functions
 
 Which option to use depends on how much you want to change the codebase vs. keep separate deployments. The fastest, least-invasive approach is Option A (rewrites).
 
+---
+
+## 🚨 IMPORTANT: Vercel vs Render for this project
+
+Short answer: Vercel is great for the frontend. For a heavy Python backend that uses spaCy, scikit-learn and other native ML libraries, Render (or a similar full container host) is the safer option.
+
+Why Render (recommended)
+- The backend depends on large Python packages with native extensions (spaCy, numpy, scikit-learn) that can cause build failures or excessive cold-start times on serverless platforms.
+- I added a multi-stage `Dockerfile` and `render.yaml` so you can deploy the entire repo as a single Docker web service (frontend static + FastAPI backend behind nginx). This gives you one public URL and consistent runtime behavior.
+
+When you might still use Vercel for backend
+- If you refactor the backend into Vercel-compatible serverless functions (small, stateless endpoints) and remove heavy native deps, you can deploy the backend to Vercel as serverless functions. That requires non-trivial code changes and testing.
+- Or host only the frontend on Vercel and point it to a separately hosted backend (Render, Railway, AWS, etc.). This is the simplest, most robust pattern for the current codebase.
+
+What I changed to make "one deploy" easy
+- Added `Dockerfile` at repo root (builds frontend then installs backend and runs nginx+gunicorn via supervisor).
+- Added `docker/nginx.conf` and `docker/supervisord.conf` to serve the frontend and proxy `/api` to the Python app.
+- Added `render.yaml` manifest for one-click deploy on Render using Docker.
+
+If you insist on using Vercel for both
+1. Option A (least code change): Keep frontend on Vercel and host backend on Render. Then configure a rewrite in the frontend Vercel project to proxy `/api/*` to the Render backend. This preserves a single public domain and is low-risk.
+2. Option B (more work): Convert backend endpoints to small Vercel serverless functions (or migrate to Next.js API routes). You will need to remove heavy native packages or find pure-Python alternatives. This is a larger engineering effort and not recommended if you need accurate ML results quickly.
+
+Recommendation (my suggested path)
+1. Use Render to deploy the Docker web service now (I prepared `render.yaml`). This will give you a single URL and stable runtime for the ML backend.
+2. Set `GEMINI_API_KEY` and `ALLOWED_ORIGINS` in the Render dashboard and optionally `DATABASE_URL` if you want persistent storage.
+3. Update the Vercel frontend `VITE_API_URL` to the Render URL (or use a Vercel rewrite to keep the frontend domain only). Redeploy frontend.
+
+If you want, I can deploy the Render service for you — I just need Render/GitHub access or a Render service API key and permission to connect the repo. Otherwise follow the quick steps below.
+
+Quick Render deploy (one-liner summary)
+1. Push these changes to `main`.
+2. Connect the GitHub repo to Render and create a Web Service that uses the repo's `render.yaml` (it will use the `Dockerfile`).
+3. Set environment variables in the Render service: `GEMINI_API_KEY`, `ALLOWED_ORIGINS`, `DATABASE_URL` (optional), `DEBUG=false`.
+
+Local Docker test (optional)
+```bash
+docker build -t cvision-ai:local .
+docker run -p 8080:8080 --env-file .env cvision-ai:local
+# open http://localhost:8080
+```
+
+Accuracy notes — how to get better results
+- Provide a valid `GEMINI_API_KEY` if you want to use Google Gemini responses in production.
+- Use a larger spaCy model in production (install `en_core_web_trf` or `en_core_web_lg`) and update `backend/ml/skill_extraction.py` to load it. Small models miss entities and skills.
+- Add labeled training data and re-train any scikit-learn models used for scoring/prediction.
+- Replace the in-memory `RESUMES` store with a persistent DB (MongoDB Atlas). I can add persistent storage if you want.
+
+---
+If you want me to deploy now, reply with "Deploy to Render" and grant one of the following:
+- a Render API Key with `create`/`deploy` permissions, or
+- temporary GitHub access to connect the repo to Render, or
+- ask me to provide step-by-step screenshots/commands and you'll do the deploy yourself.
+
+---
+
 ## ✅ Where to find the single website URL
 
 - Vercel Dashboard → select your Frontend project → the production domain is listed at the top (for example `https://your-app.vercel.app`).

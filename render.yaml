@@ -1,0 +1,18 @@
+# Render manifest for deploying monorepo as a single Docker web service
+services:
+  - type: web
+    name: cvision-ai-all-in-one
+    env: docker
+    plan: free
+    repo: https://github.com/keerthi0168/Cvision_Ai
+    branch: main
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: GEMINI_API_KEY
+        value: ""
+      - key: DATABASE_URL
+        value: ""
+      - key: ALLOWED_ORIGINS
+        value: "*"
+      - key: DEBUG
+        value: "false"
