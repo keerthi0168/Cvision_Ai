@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from config import settings
-from routes import resume, interview
+
+try:
+    from .config import settings
+    from .routes import resume, interview
+except ImportError:
+    from config import settings
+    from routes import resume, interview
 
 # Initialize FastAPI app
 app = FastAPI(
