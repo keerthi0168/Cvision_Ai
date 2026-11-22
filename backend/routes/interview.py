@@ -1,7 +1,13 @@
 from fastapi import APIRouter, HTTPException
-from routes.resume import RESUMES
-from utils.gemini_service import generate_interview_questions
-from ml.skill_extraction import extract_skills, predict_job_roles
+
+try:
+    from .resume import RESUMES
+    from ..utils.gemini_service import generate_interview_questions
+    from ..ml.skill_extraction import extract_skills, predict_job_roles
+except ImportError:
+    from routes.resume import RESUMES
+    from utils.gemini_service import generate_interview_questions
+    from ml.skill_extraction import extract_skills, predict_job_roles
 
 router = APIRouter(prefix="/interview", tags=["interview"])
 

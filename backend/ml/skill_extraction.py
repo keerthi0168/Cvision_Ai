@@ -1,6 +1,4 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
+import random
 from typing import List, Dict
 
 # Common job skills database
@@ -69,7 +67,7 @@ def predict_job_roles(skills: List[Dict]) -> List[Dict]:
     
     # Return top 3 roles
     sorted_roles = sorted(role_scores.items(), key=lambda x: x[1], reverse=True)
-    return [{'role': role, 'match': min(100, score + np.random.randint(10, 20))} for role, score in sorted_roles[:3]]
+    return [{'role': role, 'match': min(100, score + random.randint(10, 19))} for role, score in sorted_roles[:3]]
 
 def calculate_resume_score(text: str, skills: List[Dict]) -> float:
     """Calculate overall resume quality score"""

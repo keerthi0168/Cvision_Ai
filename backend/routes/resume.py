@@ -1,8 +1,13 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 import uuid
 from datetime import datetime
-from utils.pdf_parser import extract_text_from_pdf, clean_text
-from models import ResumeUploadResponse
+
+try:
+    from ..utils.pdf_parser import extract_text_from_pdf, clean_text
+    from ..models import ResumeUploadResponse
+except ImportError:
+    from utils.pdf_parser import extract_text_from_pdf, clean_text
+    from models import ResumeUploadResponse
 
 router = APIRouter(prefix="/resume", tags=["resume"])
 
@@ -42,7 +47,10 @@ async def analyze_resume(resume_id: str):
     if resume_id not in RESUMES:
         raise HTTPException(status_code=404, detail="Resume not found")
     
-    from ml.skill_extraction import extract_skills, predict_job_roles, calculate_resume_score
+    try:
+        from ..ml.skill_extraction import extract_skills, predict_job_roles, calculate_resume_score
+    except ImportError:
+        from ml.skill_extraction import extract_skills, predict_job_roles, calculate_resume_score
     
     resume = RESUMES[resume_id]
     skills = extract_skills(resume['text'])
@@ -63,8 +71,12 @@ async def get_suggestions(resume_id: str):
     if resume_id not in RESUMES:
         raise HTTPException(status_code=404, detail="Resume not found")
     
-    from ml.skill_extraction import extract_skills
-    from utils.gemini_service import generate_suggestions
+    try:
+        from ..ml.skill_extraction import extract_skills
+        from ..utils.gemini_service import generate_suggestions
+    except ImportError:
+        from ml.skill_extraction import extract_skills
+        from utils.gemini_service import generate_suggestions
     
     resume = RESUMES[resume_id]
     skills = extract_skills(resume['text'])

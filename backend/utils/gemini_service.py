@@ -1,5 +1,9 @@
 import google.generativeai as genai
-from config import settings
+
+try:
+    from ..config import settings
+except ImportError:
+    from config import settings
 
 def initialize_gemini():
     """Initialize Gemini API"""
